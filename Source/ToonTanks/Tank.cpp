@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Camera/CameraComponent.h"
-#include "DrawDebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Tank.h"
@@ -22,6 +21,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 
     PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
     PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+    PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
 }
 
 // Called every frame
@@ -36,14 +36,8 @@ void ATank::Tick(float DeltaTime)
             ECollisionChannel::ECC_Visibility,
             false,
             HitResult);
-        DrawDebugSphere(
-            GetWorld(),
-            HitResult.ImpactPoint,
-            25.f,
-            12,
-            FColor::Red,
-            false,
-            -1.f);
+        
+        RotateTurret(HitResult.ImpactPoint);
     }
 }
 
@@ -53,6 +47,7 @@ void ATank::BeginPlay()
     Super::BeginPlay();
 
     PlayerControllerRef = Cast<APlayerController>(GetController());
+    PlayerControllerRef->SetShowMouseCursor(true);
 }
 
 void ATank::Move(float value)
