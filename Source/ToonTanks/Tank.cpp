@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Camera/CameraComponent.h"
+#include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Tank.h"
@@ -36,14 +37,24 @@ void ATank::Tick(float DeltaTime)
             ECollisionChannel::ECC_Visibility,
             false,
             HitResult);
-        
+
         RotateTurret(HitResult.ImpactPoint);
+
+        // FVector ToTarget = HitResult.ImpactPoint - TankPlayerController->GetActorLocation();
+        // FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
+        // TankPlayerController->SetActorRotation(LookAtRotation);
     }
 }
 
-void ATank::HandleDestruction(){
-    
+void ATank::HandleDestruction()
+{
+
     Super::HandleDestruction();
+
+    if (DeathCameraShakeClass)
+    {
+        GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+    }
 
     SetActorHiddenInGame(true);
     SetActorTickEnabled(false);

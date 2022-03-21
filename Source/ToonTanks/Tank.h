@@ -32,6 +32,9 @@ private:
 
 	APlayerController* TankPlayerController;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<UCameraShakeBase> DeathCameraShakeClass;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

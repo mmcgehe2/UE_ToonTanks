@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Projectile.h"
+#include "Tank.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -64,6 +65,10 @@ void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimi
 		if (HitSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation(), GetActorRotation());
+		}
+		ATank* Tank = Cast<ATank>(OtherActor); 
+		if(HitCameraShakeClass && Tank){
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
 		}
 	}
 	Destroy();
