@@ -6,15 +6,17 @@
 
 void ATower::Tick(float DeltatTime)
 {
-    if(TankInRange()){
+    if (TankInRange())
+    {
         RotateTurret(Tank->GetActorLocation());
     }
 }
 
-void ATower::HandleDestruction(){
-    
+void ATower::HandleDestruction()
+{
+
     Super::HandleDestruction();
-    
+
     Destroy();
 }
 
@@ -29,13 +31,15 @@ void ATower::BeginPlay()
 
 void ATower::CheckFireCondition()
 {
-    if(TankInRange()){
+    if (TankInRange() && Tank && Tank->bAlive)
+    {
         Fire();
     }
 }
 
-bool ATower::TankInRange(){
-if (Tank)
+bool ATower::TankInRange()
+{
+    if (Tank)
     {
         float Distance = FVector::Dist(GetActorLocation(), Tank->GetActorLocation());
         // Check to see if the TAnk is in range
