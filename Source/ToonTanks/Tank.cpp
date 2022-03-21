@@ -29,10 +29,10 @@ void ATank::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if (PlayerControllerRef)
+    if (TankPlayerController)
     {
         FHitResult HitResult;
-        PlayerControllerRef->GetHitResultUnderCursor(
+        TankPlayerController->GetHitResultUnderCursor(
             ECollisionChannel::ECC_Visibility,
             false,
             HitResult);
@@ -41,13 +41,21 @@ void ATank::Tick(float DeltaTime)
     }
 }
 
+void ATank::HandleDestruction(){
+    
+    Super::HandleDestruction();
+
+    SetActorHiddenInGame(true);
+    SetActorTickEnabled(false);
+}
+
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
     Super::BeginPlay();
 
-    PlayerControllerRef = Cast<APlayerController>(GetController());
-    PlayerControllerRef->SetShowMouseCursor(true);
+    TankPlayerController = Cast<APlayerController>(GetController());
+    // TankPlayerController->SetShowMouseCursor(true);
 }
 
 void ATank::Move(float value)

@@ -35,5 +35,7 @@ protected:
 public:
 
 	virtual void Tick(float DeltatTime) override;
+
+	void HandleDestruction();
 	
 };
