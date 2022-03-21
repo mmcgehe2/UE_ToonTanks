@@ -27,6 +27,9 @@ private:
 	UPROPERTY()
 	float Damage = 50.f;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	class UParticleSystem* HitParticles;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
