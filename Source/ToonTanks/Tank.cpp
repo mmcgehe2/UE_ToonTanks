@@ -9,7 +9,7 @@
 ATank::ATank()
 {
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Tank Spring Arm"));
-    SpringArm->SetupAttachment(RootComponent);
+    SpringArm->SetupAttachment(GetTurretMesh());
 
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Tank Camera"));
     Camera->SetupAttachment(SpringArm);
@@ -23,6 +23,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
     PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
     PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
     PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
+    PlayerInputComponent->BindAxis(TEXT("RotateTurret"), this, &ATank::RotateTankTurret);
 }
 
 // Called every frame
@@ -38,11 +39,7 @@ void ATank::Tick(float DeltaTime)
             false,
             HitResult);
 
-        RotateTurret(HitResult.ImpactPoint);
-
-        // FVector ToTarget = HitResult.ImpactPoint - TankPlayerController->GetActorLocation();
-        // FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
-        // TankPlayerController->SetActorRotation(LookAtRotation);
+        // RotateTurret(HitResult.ImpactPoint);
     }
 }
 
@@ -67,16 +64,20 @@ void ATank::BeginPlay()
     Super::BeginPlay();
 
     TankPlayerController = Cast<APlayerController>(GetController());
-    // TankPlayerController->SetShowMouseCursor(true);
 }
 
-void ATank::Move(float value)
+void ATank::Move(float Value)
 {
-    AddActorLocalOffset(FVector(value * UGameplayStatics::GetWorldDeltaSeconds(this) * Speed, 0.f, 0.f), true);
+    AddActorLocalOffset(FVector(Value * UGameplayStatics::GetWorldDeltaSeconds(this) * Speed, 0.f, 0.f), true);
 }
 
-void ATank::Turn(float value)
+void ATank::Turn(float Value)
 {
 
-    AddActorLocalRotation(FRotator(0.f, value * UGameplayStatics::GetWorldDeltaSeconds(this) * TurnRate, 0.f), true);
+    AddActorLocalRotation(FRotator(0.f, Value * UGameplayStatics::GetWorldDeltaSeconds(this) * TurnRate, 0.f), true);
+}
+
+void ATank::RotateTankTurret(float Value)
+{
+    GetTurretMesh()->AddLocalRotation(FRotator(0.f, Value * 5.f, 0.f), true);
 }

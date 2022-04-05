@@ -17,5 +17,13 @@ class TOONTANKS_API AToonTanksPlayerController : public APlayerController
 public:
 	
 	void SetPlayerEnabledState(bool bPlayerEnabled);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> HUDClass;
 	
 };

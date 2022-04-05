@@ -29,6 +29,7 @@ private:
 
 	void Move(float Value);
 	void Turn(float Value);
+	void RotateTankTurret(float Value);
 
 	APlayerController* TankPlayerController;
 

@@ -1,15 +1,29 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "GameFramework/Pawn.h"
 #include "ToonTanksPlayerController.h"
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/Pawn.h"
 
+void AToonTanksPlayerController::BeginPlay()
+{
+    Super::BeginPlay();
 
-void AToonTanksPlayerController::SetPlayerEnabledState(bool bPlayerEnabled){
-    if (bPlayerEnabled){
+    UUserWidget *HUDScreen = CreateWidget(this, HUDClass);
+    if (HUDScreen){
+        HUDScreen->AddToViewport();
+    }
+
+}
+
+void AToonTanksPlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
+{
+    if (bPlayerEnabled)
+    {
         GetPawn()->EnableInput(this);
     }
-    else{
+    else
+    {
         GetPawn()->DisableInput(this);
     }
-    bShowMouseCursor = bPlayerEnabled;
+    // bShowMouseCursor = bPlayerEnabled;
 }
